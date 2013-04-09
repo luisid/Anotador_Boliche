@@ -12,7 +12,7 @@ namespace Anotador_Boliche
         {
 
         }
-        static public string[] LeerArchivo(string FileName)
+        static public string[] Leer_Archivo(string FileName)
         {
             List<string> Scores = new List<string>();
             using (System.IO.StreamReader sr = new System.IO.StreamReader(FileName))
