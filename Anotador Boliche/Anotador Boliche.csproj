@@ -63,6 +63,7 @@
     <Compile Include="LeerArchivo.cs" />
     <Compile Include="LeerArchivoUnitTesting.cs" />
     <Compile Include="Manejador.cs" />
+    <Compile Include="ManejadorUI.cs" />
     <Compile Include="Marcador.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

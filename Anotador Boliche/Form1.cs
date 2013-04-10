@@ -11,14 +11,17 @@ using System.Windows.Forms;
 
 namespace AnotadorBoliche
 {
+    public struct frame
+    {
+        public Label roll1;
+        public Label roll2;
+        public Label roll3;
+        public Label acomulado;
+    }
     public partial class Form1 : Form
     {
-
-        public int counter = 0;
-        public int turno_counter = 0;
-        public int LanzamientoPJ = 0;
-        public int LanzamientoSJ = 0;
-        Manejador manejador;
+        public Manejador manejador;
+        public ManejadorUI manejadorUI;
         [STAThread]
         static void Main()
         {
@@ -26,19 +29,9 @@ namespace AnotadorBoliche
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
-        public struct frame
-        {
-            public Label roll1;
-            public Label roll2;
-            public Label roll3;
-            public Label acomulado;
-        }
-        //private Marcador manejador.PrimerJugador = new Marcador();
-        //private Marcador SegundoJugador = new Marcador();
-        frame[] LanzamientosPrimerJugador = new frame[10];
-        frame[] LanzamientosSegundoJugador = new frame[10];
+        public frame[] LanzamientosPrimerJugador = new frame[10];
+        public frame[] LanzamientosSegundoJugador = new frame[10];
         
-        private bool turno = true; //Turno del primer jugador si turno = true, turno segundo jugador si es igual a false
         private string FilePath
         {
             get { return this.FilePath; }
@@ -140,7 +133,7 @@ namespace AnotadorBoliche
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            next();
+            manejadorUI.next();
         }
         public void open_new_file(string filename)
         {
@@ -165,136 +158,15 @@ namespace AnotadorBoliche
                     return false;
             return true;
         }
-        private void next()
-        {
-            button1.Enabled = true;
-            if (turno)
-            {
-                if (LanzamientoPJ == manejador.PrimerJugador.Turnos[turno_counter].Lanzamientos.Count())
-                {
-                    turno = !turno;
-                    LanzamientoPJ = 0;
-                }
-            }
-            else
-            {
-                if (LanzamientoSJ == manejador.SegundoJugador.Turnos[turno_counter].Lanzamientos.Count())
-                {
-                    LanzamientoSJ = 0;
-                    if (turno_counter < 9)
-                    {
-                        turno_counter++;
-                        turno = !turno;
-                    }
-                }
-            }
-            if (turno)
-            {
-                if (LanzamientoPJ == 0)
-                    LanzamientosPrimerJugador[turno_counter].roll1.Text = manejador.PrimerJugador.Turnos[turno_counter].Lanzamientos[LanzamientoPJ++].lanzamiento;
-                else if (LanzamientoPJ == 1)
-                    LanzamientosPrimerJugador[turno_counter].roll2.Text = manejador.PrimerJugador.Turnos[turno_counter].Lanzamientos[LanzamientoPJ++].lanzamiento;
-                else if (LanzamientoPJ == 2)
-                    LanzamientosPrimerJugador[turno_counter].roll3.Text = manejador.PrimerJugador.Turnos[turno_counter].Lanzamientos[LanzamientoPJ++].lanzamiento;
-                setAcomulado(manejador.PrimerJugador, LanzamientosPrimerJugador, LanzamientoPJ);
-            }
-            else
-            {
-                if (LanzamientoSJ == 0)
-                    LanzamientosSegundoJugador[turno_counter].roll1.Text = manejador.SegundoJugador.Turnos[turno_counter].Lanzamientos[LanzamientoSJ++].lanzamiento;
-                else if (LanzamientoSJ == 1)
-                    LanzamientosSegundoJugador[turno_counter].roll2.Text = manejador.SegundoJugador.Turnos[turno_counter].Lanzamientos[LanzamientoSJ++].lanzamiento;
-                else if (LanzamientoSJ == 2)
-                    LanzamientosSegundoJugador[turno_counter].roll3.Text = manejador.SegundoJugador.Turnos[turno_counter].Lanzamientos[LanzamientoSJ++].lanzamiento;
-                setAcomulado(manejador.SegundoJugador, LanzamientosSegundoJugador, LanzamientoSJ);
-                if (turno_counter == 9 && LanzamientoSJ == 3)
-                    button3.Enabled = false;
-            }
-        }
-        private void setAcomulado(Marcador marcador, frame[] LanzamientosJugador, int CurrentLanzamiento)
-        {
-            for (int i = 0; i < marcador.Turnos[turno_counter].Lanzamientos[CurrentLanzamiento - 1].AcomuladosDependientes.Count(); i++)
-                LanzamientosJugador[marcador.Turnos[turno_counter].Lanzamientos[CurrentLanzamiento - 1].AcomuladosDependientes[i]].acomulado.Text = Convert.ToString(marcador.Turnos[marcador.Turnos[turno_counter].Lanzamientos[CurrentLanzamiento - 1].AcomuladosDependientes[i]].acumulado);
-        }
-        private void removeAcomulado(Marcador marcador, frame[] LanzamientosJugador, int CurrentLanzamiento)
-        {
-            for (int i = 0; i < marcador.Turnos[turno_counter].Lanzamientos[CurrentLanzamiento].AcomuladosDependientes.Count(); i++)
-                LanzamientosJugador[marcador.Turnos[turno_counter].Lanzamientos[CurrentLanzamiento].AcomuladosDependientes[i]].acomulado.Text = "";
-        }
-        private void back()
-        {
-            button3.Enabled = true;
-            if (turno)
-            {
-                if (LanzamientoPJ == 0)
-                {
-                    turno = !turno;
-                    if (turno_counter != 0)
-                    {
-                        turno_counter--;
-                    }
-                    else
-                        button1.Enabled = false;
-                }
-            }
-            else
-            {
-                if (LanzamientoSJ == 0)
-                {
-                    turno = !turno;
-                }
-            }
-            if (turno)
-            {
-
-                if (LanzamientosPrimerJugador[turno_counter].roll3 != null && LanzamientosPrimerJugador[turno_counter].roll3.Text != "")
-                {
-                    LanzamientosPrimerJugador[turno_counter].roll3.Text = "";
-                    LanzamientoPJ = 2;
-                }
-                else if (LanzamientosPrimerJugador[turno_counter].roll2.Text != "")
-                {
-                    LanzamientosPrimerJugador[turno_counter].roll2.Text = "";
-                    LanzamientoPJ = 1;
-                }
-                else if (LanzamientosPrimerJugador[turno_counter].roll1.Text != "")
-                {
-                    LanzamientosPrimerJugador[turno_counter].roll1.Text = "";
-                    LanzamientoPJ = 0;
-                    if (turno_counter == 0)
-                        button1.Enabled = false;
-                }
-                removeAcomulado(manejador.PrimerJugador, LanzamientosPrimerJugador, LanzamientoPJ);
-            }
-            else
-            {
-                if (LanzamientosSegundoJugador[turno_counter].roll3 != null && LanzamientosSegundoJugador[turno_counter].roll3.Text != "")
-                {
-                    LanzamientosSegundoJugador[turno_counter].roll3.Text = "";
-                    LanzamientoSJ = 2;
-                }
-                else if (LanzamientosSegundoJugador[turno_counter].roll2.Text != "")
-                {
-                    LanzamientosSegundoJugador[turno_counter].roll2.Text = "";
-                    LanzamientoSJ = 1;
-                }
-                else if (LanzamientosSegundoJugador[turno_counter].roll1.Text != "")
-                {
-                    LanzamientosSegundoJugador[turno_counter].roll1.Text = "";
-                    LanzamientoSJ = 0;
-                }
-                removeAcomulado(manejador.SegundoJugador, LanzamientosSegundoJugador, LanzamientoSJ);
-            }
-        }
-        
         private void button1_Click(object sender, EventArgs e)
         {
-            back();
+            manejadorUI.back();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             manejador = new Manejador(textBox1.Text);
+            manejadorUI = new ManejadorUI(this);
             button1.Enabled = false;
             button3.Enabled = true;
         }

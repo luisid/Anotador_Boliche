@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Anotador_Boliche
 {
-    class Manejador
+    public class Manejador
     {
         public Marcador PrimerJugador = new Marcador();
         public Marcador SegundoJugador = new Marcador();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Anotador_Boliche
 {
-    class Marcador
+    public class Marcador
     {
         public class Lanzamiento
         {
