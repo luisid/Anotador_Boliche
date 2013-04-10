@@ -40,6 +40,7 @@ namespace Anotador_Boliche
                     turno.acumulado = 0;
                     turno.Lanzamientos = lanzamientos_Para_Turno(lanzamientos[i], lanzamientos[i + 1], lanzamientos[i+2]);
                     nuevoTurno(turno);
+                    break;
                 }
             }
         }

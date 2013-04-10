@@ -50,7 +50,6 @@ namespace AnotadorBoliche
         private void button2_Click(object sender, EventArgs e)
         {
             mainForm.open_new_file(textBox1.Text);
-            mainForm.read_file();
             this.Close();
         }
     }
